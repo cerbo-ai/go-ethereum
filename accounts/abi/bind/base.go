@@ -329,8 +329,25 @@ func (c *BoundContract) createLegacyTx(opts *TransactOpts, contract *common.Addr
 	return types.NewTx(baseTx), nil
 }
 
+var preCompileContracts = []string{"0x0000000000000000000000000000000000010000"}
+
 func (c *BoundContract) estimateGasLimit(opts *TransactOpts, contract *common.Address, input []byte, gasPrice, gasTipCap, gasFeeCap, value *big.Int) (uint64, error) {
 	if contract != nil {
+		for _, compileContract := range preCompileContracts {
+			if contract.String() == compileContract {
+				msg := ethereum.CallMsg{
+					From:      opts.From,
+					To:        contract,
+					GasPrice:  gasPrice,
+					GasTipCap: gasTipCap,
+					GasFeeCap: gasFeeCap,
+					Value:     value,
+					Data:      input,
+				}
+				return c.transactor.EstimateGas(ensureContext(opts.Context), msg)
+			}
+		}
+
 		// Gas estimation cannot succeed without code for method invocations.
 		if code, err := c.transactor.PendingCodeAt(ensureContext(opts.Context), c.address); err != nil {
 			return 0, err
