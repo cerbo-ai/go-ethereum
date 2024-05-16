@@ -59,3 +59,6 @@ Ref: https://keepachangelog.com/en/1.0.0/
 * [#6](https://github.com/evmos/go-ethereum/pull/6) Refactor `Stack` implementation
 * [#3](https://github.com/evmos/go-ethereum/pull/3) Move the `JumpTable` defaults to a separate function.
 * [#2](https://github.com/evmos/go-ethereum/pull/2) Define `Interpreter` interface for the EVM.
+
+### Refactor
+* [#1](https://github.com/cerbo-ai/go-ethereum/pull/1) Refactor estimate gas limit function.
